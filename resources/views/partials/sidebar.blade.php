@@ -70,6 +70,15 @@
                 </a>
             </li>
 
+            <li class="menu {{ request()->routeIs('purchases') ? 'active' : '' }}">
+                <a href="{{ route('purchases') }}" class="dropdown-toggle" aria-expanded="false">
+                    <div class="d-flex align-items-center gap-2">
+                        <Iconify-icon icon="streamline:receipt" class="flex-shrink-0" width="20" height="20"></Iconify-icon>
+                        <span class="menu-text flex-grow-1">Purchases</span>
+                    </div>
+                </a>
+            </li>
+
             <li class="menu {{ request()->routeIs('users') ? 'active' : '' }}">
                 <a href="{{ route('users') }}" class="dropdown-toggle" aria-expanded="false">
                     <div class="d-flex align-items-center gap-2">
