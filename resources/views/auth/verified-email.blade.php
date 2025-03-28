@@ -5,7 +5,7 @@
         <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-8 col-12 d-flex flex-column align-self-center mx-auto">
             <div class="d-flex justify-content-center">
                 <a href="{{ route('home') }}" wire:ignore class="text-decoration-none d-flex align-items-center gap-2">
-                    <img src="{{ url('src/assets/img/logo.svg') }}" width="80px" class="navbar-logo" alt="logo">
+                    <img src="{{ asset('src/assets/img/logo.svg') }}" width="80px" class="navbar-logo" alt="logo">
                     <h2 class="text-info">{{ config('app.name') }}</h2>
                 </a>
             </div>
