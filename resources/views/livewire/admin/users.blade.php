@@ -117,7 +117,6 @@
             </tbody>
         </table>
     </div>
-
     <!-- 🌟 Pagination -->
     <div class="mt-2">
         {{ $users->links('components.pagination', data: ['scrollTo' => false]) }}

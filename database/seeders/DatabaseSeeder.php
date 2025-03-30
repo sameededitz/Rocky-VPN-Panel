@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Plan;
 use App\Models\User;
-use App\Models\VpsServer;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,7 +22,5 @@ class DatabaseSeeder extends Seeder
         User::factory(20)->create();
 
         Plan::factory(3)->create();
-
-        VpsServer::factory()->test()->create();
     }
 }

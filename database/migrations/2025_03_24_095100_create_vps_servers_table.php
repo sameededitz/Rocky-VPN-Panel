@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('username');
             $table->string('ip_address')->unique();
-            $table->longtext('private_key'); 
+            $table->longtext('private_key')->nullable(); 
             $table->string('password')->nullable();
             $table->integer('port')->default(22);
             $table->enum('status', ['active', 'inactive'])->default('inactive');

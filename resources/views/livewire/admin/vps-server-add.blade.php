@@ -11,8 +11,8 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="{{ route('users') }}" class="d-flex align-items-center">
-                            Users
+                        <a href="{{ route('vps-servers') }}" class="d-flex align-items-center">
+                            VPS Servers
                         </a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">Create</li>
@@ -71,6 +71,7 @@
                         <div class="col-12">
                             <label for="status">Status</label>
                             <select class="form-select w-100" id="status" wire:model="status">
+                                <option value="" selected>Select Status</option>
                                 <option value="active">Active</option>
                                 <option value="inactive">Inactive</option>
                             </select>

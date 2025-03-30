@@ -16,7 +16,7 @@
         "livewire/livewire": "^3.6",
         "phpseclib/phpseclib": "~3.0",
         "spatie/laravel-medialibrary": "^11.12",
-        "spatie/laravel-sluggable": "^3.7",
+        "spatie/laravel-sluggable": "*",
         "spatie/livewire-filepond": "^1.4"
     },
     "require-dev": {

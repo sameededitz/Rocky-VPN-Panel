@@ -27,8 +27,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/purchase/history', [PurchaseController::class, 'history'])->name('api.plan.history');
 
     Route::post('/purchase/add', [PurchaseController::class, 'addPurchase'])->name('api.add.purchase');
-});
 
-Route::get('/servers', [ResourceController::class, 'servers']);
+    Route::get('/servers', [ResourceController::class, 'servers']);
+});
+Route::get('/vps-servers', [ResourceController::class, 'vpsServers']);
 
 Route::get('/plans', [ResourceController::class, 'plans']);

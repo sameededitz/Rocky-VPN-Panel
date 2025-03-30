@@ -26,8 +26,8 @@ class AllVpsServers extends Component
             'username' => 'required',
             'port' => 'required',
             'status' => 'required',
-            'private_key' => 'required',
-            'password' => 'required',
+            'private_key' => 'nullable|required_without:password',
+            'password' => 'nullable|required_without:private_key',
         ];
     }
 

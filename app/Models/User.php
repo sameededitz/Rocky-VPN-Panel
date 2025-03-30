@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Spatie\Sluggable\HasSlug;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Sluggable\SlugOptions;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Notifications\CustomVerifyEmailNotification;
@@ -11,7 +13,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens, HasSlug;
 
     protected $fillable = [
         'name',
@@ -35,6 +37,14 @@ class User extends Authenticatable implements MustVerifyEmail
             'last_login' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug')
+            ->doNotGenerateSlugsOnUpdate();
     }
 
     public function sendEmailVerificationNotification()

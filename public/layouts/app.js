@@ -26,7 +26,6 @@ var App = function () {
             var sidebarWrapper = document.querySelector('.sidebar-wrapper li.active');
 
             if (!sidebarWrapper) {
-                console.warn("No active menu item found in sidebar! Skipping scroll.");
                 return; // Exit function to prevent errors
             }
 

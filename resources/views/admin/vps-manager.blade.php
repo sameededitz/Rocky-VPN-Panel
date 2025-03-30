@@ -14,6 +14,10 @@
 
     <link href="{{ asset('src/assets/css/light/widgets/modules-widgets.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('src/assets/css/dark/widgets/modules-widgets.css') }}" rel="stylesheet" type="text/css">
+
+    <link href="{{ asset('src/plugins/src/sweetalerts2/sweetalerts2.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('src/plugins/css/light/sweetalerts2/custom-sweetalert.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('src/plugins/css/dark/sweetalerts2/custom-sweetalert.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('content')
@@ -43,8 +47,5 @@
     <livewire:admin.vps-manager lazy :server="$server" />
 @endsection
 @section('scripts')
-    <script src="{{ asset('src/plugins/src/sweetalerts2/sweetalerts2.min.js') }}"></script>
-
     <script src="{{ asset('src/plugins/src/apex/apexcharts.min.js') }}"></script>
-    {{-- <script src="{{ asset('src/plugins/src/apex/custom-apexcharts.js') }}"></script> --}}
 @endsection

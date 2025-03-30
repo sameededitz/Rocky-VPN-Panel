@@ -2,12 +2,17 @@
 
 namespace App\Livewire\Admin;
 
-use App\Models\VpsServer;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
-use phpseclib3\Crypt\PublicKeyLoader;
 use phpseclib3\Net\SSH2;
+use App\Models\VpsServer;
+use Livewire\Attributes\Lazy;
+use Livewire\Attributes\Title;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
+use phpseclib3\Crypt\PublicKeyLoader;
 
+// #[Lazy]
+// #[Title('VPS Manager')]
 class VpsManager extends Component
 {
     public VpsServer $server;
@@ -18,6 +23,16 @@ class VpsManager extends Component
     public $ramUsage = 'N/A';
     public $diskUsage = 'N/A';
     public $isLoading = false;
+
+    public $wireguardStatus = 'Unknown';
+    public $ikev2Status = 'Unknown';
+
+    public $wireguardConnectedUsers = 0;
+    public $ikev2ConnectedUsers = 0;
+    public $totalConnectedUsers = 0;
+
+    public $connectedUsers = [];
+    public $vpnTypeFilter = 'all';
 
     public function placeholder()
     {
@@ -51,6 +66,10 @@ HTML;
     private function connectToServer()
     {
         try {
+            if (empty($this->server->private_key) && empty($this->server->password)) {
+                throw new \Exception("Either a password or a private key is required for authentication.");
+            }
+
             $ssh = new SSH2($this->server->ip_address, $this->server->port, 30);
 
             if (!empty($this->server->private_key)) {
@@ -58,7 +77,7 @@ HTML;
                 if (!$ssh->login($this->server->username, $key)) {
                     throw new \Exception("SSH key authentication failed");
                 }
-            } else {
+            } elseif (!empty($this->server->password)) {
                 if (!$ssh->login($this->server->username, $this->server->password)) {
                     throw new \Exception("Password authentication failed");
                 }
@@ -66,8 +85,74 @@ HTML;
 
             return $ssh;
         } catch (\Exception $e) {
-            Log::error("Error connecting to server: " . $e->getMessage());
+            $this->dispatch('sweetToast', type: 'error', message: $e->getMessage(), title: 'Error!');
+            Log::channel('ssh')->error("Error connecting to {$this->server->ip_address} server: " . $e->getMessage());
             return false;
+        }
+    }
+
+    private function fetchWireguardStatus($ssh)
+    {
+        try {
+            $status = trim($ssh->exec("systemctl is-active wg-quick@wg0"));
+            $this->wireguardStatus = ($status === 'active') ? 'Running' : 'Not Running';
+        } catch (\Exception $e) {
+            Log::channel('ssh')->error("Error fetching WireGuard status: " . $e->getMessage());
+            $this->wireguardStatus = 'Error';
+        }
+    }
+
+    private function fetchIkev2Status($ssh)
+    {
+        try {
+            $status = trim($ssh->exec("systemctl is-active strongswan-starter"));
+            $this->ikev2Status = ($status === 'active') ? 'Running' : 'Not Running';
+        } catch (\Exception $e) {
+            Log::channel('ssh')->error("Error fetching IKEv2 status: " . $e->getMessage());
+            $this->ikev2Status = 'Error';
+        }
+    }
+
+    private function fetchConnectedUsers()
+    {
+        try {
+            $this->wireguardConnectedUsers = 5;
+            $apiUrl = "http://{$this->server->ip_address}:5000/api/vpn/all-connected-users";
+            $apiToken = env('VPS_API_TOKEN'); // API Token
+            $response = Http::withHeaders([
+                'X-API-Token' => $apiToken
+            ])->get($apiUrl);
+
+            $data = $response->json();
+            if (!isset($data['total_connected'], $data['wireguard_connected'], $data['ikev2_connected'])) {
+                throw new \Exception("Invalid API response format");
+            }
+
+            // Map connected users with required fields
+            $this->connectedUsers = collect($data['connected_users'])->map(function ($user) {
+                return [
+                    'name' => isset($user['vpn_type']) && $user['vpn_type'] === 'wireguard'
+                        ? $user['name']
+                        : ($user['remote_identity'] ?? 'Unknown'),
+                    'ip' => isset($user['vpn_type']) && $user['vpn_type'] === 'wireguard'
+                        ? ($user['endpoint'] ?? 'N/A')
+                        : ($user['local_ip'] ?? 'N/A'),
+                    'uptime' => isset($user['vpn_type']) && $user['vpn_type'] === 'wireguard'
+                        ? ($user['latest_handshake'] ?? 'N/A')
+                        : ($user['uptime'] ?? 'N/A'),
+                    'vpn_type' => $user['vpn_type'] ?? 'unknown'
+                ];
+            })->toArray();
+
+            $this->wireguardConnectedUsers = $data['wireguard_connected'] ?? 0;
+            $this->ikev2ConnectedUsers = $data['ikev2_connected'] ?? 0;
+            $this->totalConnectedUsers = $data['total_connected'] ?? 0;
+        } catch (\Exception $e) {
+            $this->wireguardConnectedUsers = 'Error';
+            $this->ikev2ConnectedUsers = 'Error';
+            $this->totalConnectedUsers = 'Error';
+            $this->dispatch('sweetToast', type: 'error', message: $e->getMessage(), title: 'Error!');
+            Log::channel('ssh')->error("Error fetching VPN connected users: " . $e->getMessage());
         }
     }
 
@@ -93,12 +178,18 @@ HTML;
             list($used, $total, $percent) = preg_split('/\s+/', $diskUsageRaw);
             $this->diskUsage = "$used / $total ($percent)";
 
+            $this->fetchWireguardStatus($ssh);
+            $this->fetchIkev2Status($ssh);
+            $this->fetchConnectedUsers();
+
             $ssh->disconnect();
         } catch (\Exception $e) {
-            Log::error("Error fetching server usage: " . $e->getMessage());
             $this->cpuUsage = 'Error';
             $this->ramUsage = 'Error';
             $this->diskUsage = 'Error';
+            $this->dispatch('sweetToast', type: 'error', message: $e->getMessage(), title: 'Error!');
+            Log::channel('ssh')->error("Error fetching {$this->server->ip_address} server usage: " . $e->getMessage());
+            $ssh->disconnect();
         } finally {
             $this->isLoading = false;
         }
@@ -107,6 +198,10 @@ HTML;
     public function render()
     {
         $this->fetchServerUsage();
-        return view('livewire.admin.vps-manager');
+
+        /** @disregard @phpstan-ignore-line */
+        return view('livewire.admin.vps-manager')
+            ->layout('layouts.app')
+            ->section('content');
     }
 }

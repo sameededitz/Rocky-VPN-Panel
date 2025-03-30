@@ -25,7 +25,11 @@
 
                 <div class="middle-content container-xxl p-0">
 
-                    {{ $slot }}
+                    @if (!empty($slot))
+                        {{ $slot }}
+                    @else
+                        @yield('content')
+                    @endif
 
                 </div>
 
