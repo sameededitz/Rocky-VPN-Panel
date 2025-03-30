@@ -17,6 +17,7 @@ class VpsServer extends Model
         'private_key',
         'password',
         'port',
+        'domain',
         'status',
     ];
 

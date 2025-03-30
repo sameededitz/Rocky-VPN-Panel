@@ -54,8 +54,8 @@
                             <label for="name" class="form-label">Current Image</label>
                             @if ($server->getFirstMediaUrl('image'))
                                 <div class="position-relative">
-                                    <img src="{{ $server->getFirstMediaUrl('image') }}" alt="Current Image" class="img-thumbnail w-100"
-                                        style="max-width: 150px;">
+                                    <img src="{{ $server->getFirstMediaUrl('image') }}" alt="Current Image"
+                                        class="img-thumbnail w-100" style="max-width: 150px;">
                                 </div>
                             @else
                                 <p class="text-muted">No image uploaded</p>
@@ -89,6 +89,16 @@
                                 <option value="active">Active</option>
                                 <option value="inactive">Inactive</option>
                             </select>
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="longitude" class="form-label">Longitude</label>
+                            <input type="text" class="form-control" id="name" placeholder="longitude"
+                                name="longitude" wire:model="longitude">
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="latitude" class="form-label">Latitude</label>
+                            <input type="text" class="form-control" id="name" placeholder="latitude"
+                                name="latitude" wire:model="latitude">
                         </div>
                         <div class="col-sm-12">
                             <label class="form-label mb-2">Platforms</label>

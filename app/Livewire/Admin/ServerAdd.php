@@ -11,7 +11,7 @@ class ServerAdd extends Component
 {
     use WithFileUploads, WithFilePond;
 
-    public $image, $name, $android = false, $ios = false, $macos = false, $windows = false, $type, $status;
+    public $image, $name, $android = false, $ios = false, $macos = false, $windows = false, $longitude, $latitude, $type, $status;
 
     protected function rules()
     {
@@ -21,6 +21,8 @@ class ServerAdd extends Component
             'ios' => 'required|boolean',
             'macos' => 'required|boolean',
             'windows' => 'required|boolean',
+            'longitude' => 'required|numeric',
+            'latitude' => 'required|numeric',
             'type' => 'required|in:free,premium',
             'status' => 'required|in:active,inactive',
             'image' => 'required|image|mimes:jpeg,png,jpg|max:20420',
@@ -37,6 +39,8 @@ class ServerAdd extends Component
             'ios' => $this->ios,
             'macos' => $this->macos,
             'windows' => $this->windows,
+            'longitude' => $this->longitude,
+            'latitude' => $this->latitude,
             'type' => $this->type,
             'status' => $this->status,
         ]);

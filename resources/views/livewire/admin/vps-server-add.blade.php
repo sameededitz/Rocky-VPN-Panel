@@ -69,6 +69,14 @@
                             @enderror
                         </div>
                         <div class="col-12">
+                            <label for="domain">Domain</label>
+                            <input type="text" class="form-control" id="domain" placeholder="Domain"
+                                wire:model="domain">
+                            @error('domain')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="col-12">
                             <label for="status">Status</label>
                             <select class="form-select w-100" id="status" wire:model="status">
                                 <option value="" selected>Select Status</option>

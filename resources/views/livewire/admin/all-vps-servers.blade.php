@@ -65,6 +65,7 @@
                                     <th>IP Address</th>
                                     <th>Username</th>
                                     <th>Port</th>
+                                    <th>Domain</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -77,6 +78,7 @@
                                         <td>{{ $server->ip_address }}</td>
                                         <td>{{ $server->username }}</td>
                                         <td>{{ $server->port }}</td>
+                                        <td>{{ $server->domain }}</td>
                                         <td>
                                             <span
                                                 class="badge {{ $server->status === 'active' ? 'badge-light-success' : 'badge-light-danger' }}">{{ Str::title($server->status) }}</span>
@@ -104,7 +106,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="text-center">No VPS servers found</td>
+                                        <td colspan="8" class="text-center">No VPS servers found</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -172,6 +174,14 @@
                             <input type="number" class="form-control" id="port" placeholder="Port"
                                 wire:model="port">
                             @error('port')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="domain">Domain</label>
+                            <input type="url" class="form-control" id="domain" placeholder="Domain"
+                                wire:model="domain">
+                            @error('domain')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>

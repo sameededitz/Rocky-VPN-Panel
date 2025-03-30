@@ -12,7 +12,7 @@ class ServerEdit extends Component
     use WithFileUploads, WithFilePond;
 
     public Server $server;
-    public $image, $name, $android, $ios, $macos, $windows, $type, $status;
+    public $image, $name, $android, $ios, $macos, $windows,$longitude, $latitude, $type, $status;
 
     public function mount(Server $server)
     {
@@ -22,6 +22,8 @@ class ServerEdit extends Component
         $this->ios = $server->ios;
         $this->macos = $server->macos;
         $this->windows = $server->windows;
+        $this->longitude = $server->longitude;
+        $this->latitude = $server->latitude;
         $this->type = $server->type;
         $this->status = $server->status;
     }
@@ -34,6 +36,8 @@ class ServerEdit extends Component
             'ios' => 'boolean',
             'macos' => 'boolean',
             'windows' => 'boolean',
+            'longitude' => 'required|numeric',
+            'latitude' => 'required|numeric',
             'type' => 'required|in:free,premium',
             'status' => 'required|in:active,inactive',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:20420',
@@ -50,6 +54,8 @@ class ServerEdit extends Component
             'ios' => $this->ios,
             'macos' => $this->macos,
             'windows' => $this->windows,
+            'longitude' => $this->longitude,
+            'latitude' => $this->latitude,
             'type' => $this->type,
             'status' => $this->status,
         ]);
@@ -61,7 +67,7 @@ class ServerEdit extends Component
                 ->toMediaCollection('image');
         }
 
-        $this->reset(['image','name', 'android', 'ios', 'macos', 'windows', 'type', 'status']);
+        $this->reset(['image','name', 'android', 'ios', 'macos', 'windows','longitude', 'latitude', 'type', 'status']);
 
         $this->dispatch('snackbar', message: 'Server updated successfully!', type: 'success');
         $this->dispatch('redirect', url: route('servers'));

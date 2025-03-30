@@ -7,7 +7,7 @@ use App\Models\VpsServer;
 
 class VpsServerAdd extends Component
 {
-    public $name, $ip_address, $username, $port, $status, $private_key, $password;
+    public $name, $ip_address, $username, $port, $domain, $status, $private_key, $password;
 
     protected function rules()
     {
@@ -16,6 +16,7 @@ class VpsServerAdd extends Component
             'ip_address' => 'required',
             'username' => 'required',
             'port' => 'required',
+            'domain' => 'required',
             'status' => 'required',
             'private_key' => 'nullable|required_without:password',
             'password' => 'nullable|required_without:private_key',
@@ -31,6 +32,7 @@ class VpsServerAdd extends Component
             'ip_address' => $this->ip_address,
             'username' => $this->username,
             'port' => $this->port,
+            'domain' => $this->domain,
             'status' => $this->status,
             'private_key' => $this->private_key,
             'password' => $this->password,

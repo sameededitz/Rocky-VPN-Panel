@@ -80,6 +80,16 @@
                             </select>
                         </div>
                         <div class="col-sm-12">
+                            <label for="longitude" class="form-label">Longitude</label>
+                            <input type="text" class="form-control" id="name" placeholder="longitude" name="longitude"
+                                wire:model="longitude">
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="latitude" class="form-label">Latitude</label>
+                            <input type="text" class="form-control" id="name" placeholder="latitude" name="latitude"
+                                wire:model="latitude">
+                        </div>
+                        <div class="col-sm-12">
                             <label class="form-label mb-2">Platforms</label>
                             <div class="form-check ps-0 mb-2">
                                 <div class="switch form-switch-custom switch-inline form-switch-success">

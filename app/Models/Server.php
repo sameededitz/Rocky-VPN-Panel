@@ -10,7 +10,7 @@ class Server extends Model implements HasMedia
 {
     use InteractsWithMedia;
 
-    protected $fillable = ['name', 'android', 'ios', 'macos', 'windows', 'type', 'status'];
+    protected $fillable = ['name', 'android', 'ios', 'macos', 'windows', 'longitude', 'latitude', 'type', 'status'];
 
     protected $casts = [
         'android' => 'boolean',
