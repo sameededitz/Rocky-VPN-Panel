@@ -91,7 +91,7 @@
                         <td>{{ $user->created_at->toFormattedDateString() }}</td>
                         <td>
                             <div class="d-flex align-items-center justify-content-center">
-                                <a href="{{ route('admin.manage', $user->id) }}"
+                                <a href="{{ route('user.manage', $user->slug) }}"
                                     class="btn btn-light-info btn-rounded btn-icon me-1 d-inline-flex align-items-center">
                                     <Iconify-icon icon="ic:round-manage-accounts" width="20"
                                         height="20"></Iconify-icon>

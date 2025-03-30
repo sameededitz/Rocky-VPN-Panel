@@ -20,6 +20,7 @@ use App\Livewire\Admin\PlanEdit;
 use App\Livewire\Admin\SubServerEdit;
 use App\Livewire\Admin\SubSubServerAdd;
 use App\Livewire\Admin\SubSubServerEdit;
+use App\Models\User;
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -47,7 +48,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/purchases', AllPurchases::class)->name('purchases');
 
     Route::get('/users', [DashboardController::class, 'users'])->name('users');
-    Route::get('/users/{user:name}/manage', ManageUser::class)->name('user.manage');
+    Route::get('/users/{user:slug}/manage', ManageUser::class)->name('user.manage');
     Route::get('/user/create', UserAdd::class)->name('user.create');
     Route::get('/user/{user}/update', UserEdit::class)->name('user.edit');
 
