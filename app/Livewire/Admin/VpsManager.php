@@ -124,35 +124,41 @@ HTML;
             ])->get($apiUrl);
 
             $data = $response->json();
-            // if (!isset($data['total_connected'], $data['wireguard_connected'], $data['ikev2_connected'])) {
-            //     throw new \Exception("Invalid API response format");
-            // }
+            if (!isset($data['total_connected'], $data['wireguard_connected'], $data['ikev2_connected'])) {
+                throw new \Exception("Invalid API response format");
+            }
+            Log::channel('ssh')->info("Fetched connected users from {$this->server->ip_address}: " . json_encode($data));
 
-            // Map connected users with required fields
-            $this->connectedUsers = collect($data['connected_users'])->map(function ($user) {
-                return [
-                    'name' => isset($user['vpn_type']) && $user['vpn_type'] === 'wireguard'
-                        ? $user['name']
-                        : ($user['remote_identity'] ?? 'Unknown'),
-                    'ip' => isset($user['vpn_type']) && $user['vpn_type'] === 'wireguard'
-                        ? ($user['endpoint'] ?? 'N/A')
-                        : ($user['local_ip'] ?? 'N/A'),
-                    'uptime' => isset($user['vpn_type']) && $user['vpn_type'] === 'wireguard'
-                        ? ($user['latest_handshake'] ?? 'N/A')
-                        : ($user['uptime'] ?? 'N/A'),
-                    'vpn_type' => $user['vpn_type'] ?? 'unknown'
-                ];
-            })->toArray();
+            if (!isset($data['connected_users']) || !is_array($data['connected_users']) || empty($data['connected_users'])) {
+                $this->connectedUsers = null;
+            } else {
+                // Map connected users with required fields
+                $this->connectedUsers = collect($data['connected_users'])->map(function ($user) {
+                    return [
+                        'name' => isset($user['vpn_type']) && $user['vpn_type'] === 'wireguard'
+                            ? $user['name']
+                            : ($user['remote_identity'] ?? 'Unknown'),
+                        'ip' => isset($user['vpn_type']) && $user['vpn_type'] === 'wireguard'
+                            ? ($user['endpoint'] ?? 'N/A')
+                            : ($user['local_ip'] ?? 'N/A'),
+                        'uptime' => isset($user['vpn_type']) && $user['vpn_type'] === 'wireguard'
+                            ? ($user['latest_handshake'] ?? 'N/A')
+                            : ($user['uptime'] ?? 'N/A'),
+                        'vpn_type' => $user['vpn_type'] ?? 'unknown'
+                    ];
+                })->toArray();
+            }
 
             $this->wireguardConnectedUsers = $data['wireguard_connected'] ?? 0;
             $this->ikev2ConnectedUsers = $data['ikev2_connected'] ?? 0;
             $this->totalConnectedUsers = $data['total_connected'] ?? 0;
         } catch (\Exception $e) {
+            $this->connectedUsers = null;
             $this->wireguardConnectedUsers = 'Error';
             $this->ikev2ConnectedUsers = 'Error';
             $this->totalConnectedUsers = 'Error';
             $this->dispatch('sweetToast', type: 'error', message: $e->getMessage(), title: 'Error!');
-            Log::channel('ssh')->error("Error fetching VPN connected users: " . $e->getMessage());
+            Log::channel('ssh')->error("Error fetching {$this->server->ip_address} server VPN connected users: " . $e->getMessage());
         }
     }
 
