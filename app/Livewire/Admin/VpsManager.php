@@ -124,9 +124,9 @@ HTML;
             ])->get($apiUrl);
 
             $data = $response->json();
-            if (!isset($data['total_connected'], $data['wireguard_connected'], $data['ikev2_connected'])) {
-                throw new \Exception("Invalid API response format");
-            }
+            // if (!isset($data['total_connected'], $data['wireguard_connected'], $data['ikev2_connected'])) {
+            //     throw new \Exception("Invalid API response format");
+            // }
 
             // Map connected users with required fields
             $this->connectedUsers = collect($data['connected_users'])->map(function ($user) {
