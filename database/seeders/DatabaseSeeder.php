@@ -19,8 +19,6 @@ class DatabaseSeeder extends Seeder
         // Create one regular user
         User::factory()->user()->create();
 
-        User::factory(20)->create();
-
         Plan::factory(3)->create();
     }
 }
