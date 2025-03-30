@@ -124,7 +124,15 @@ HTML;
             ])->get($apiUrl);
 
             $data = $response->json();
-            Log::channel('ssh')->info("Fetched connected users from {$this->server->ip_address} ", $data);
+
+            // Log response for debugging
+            Log::channel('ssh')->info("Fetched connected users from {$this->server->ip_address} ", (array) $data ?? []);
+
+            // Check if response is null or invalid
+            if (!$data || !is_array($data)) {
+                throw new \Exception("Invalid API response: null or non-array received");
+            }
+
             if (!isset($data['total_connected'], $data['wireguard_connected'], $data['ikev2_connected'])) {
                 throw new \Exception("Invalid API response format");
             }
