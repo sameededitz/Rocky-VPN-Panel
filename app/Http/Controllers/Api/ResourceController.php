@@ -8,14 +8,13 @@ use App\Models\VpsServer;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use App\Http\Resources\ServerResource;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use App\Http\Resources\VpsServerResource;
 
 class ResourceController extends Controller
 {
     public function servers(Request $request)
     {
-        /** @disregard @phpstan-ignore-line */
         $servers = Server::where($request->platform, true)->with(['subServers.subSubServers'])->get();
 
         return response()->json([
@@ -46,7 +45,6 @@ class ResourceController extends Controller
 
     public function nearestServer(Request $request)
     {
-        /** @disregard @phpstan-ignore-line */
         $platform = $request->platform;
         $ip = $request->ip();
         $locationData = Http::get("http://ip-api.com/json/{$ip}")->json();
