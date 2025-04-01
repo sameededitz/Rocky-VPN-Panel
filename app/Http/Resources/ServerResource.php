@@ -24,8 +24,6 @@ class ServerResource extends JsonResource
                 'macos' => (bool) $this->macos,
                 'windows' => (bool) $this->windows,
             ],
-            'latitude' => $this->latitude,
-            'longitude' => $this->longitude,
             'type' => $this->type,
             'status' => $this->status,
             'created_at' => $this->created_at,
