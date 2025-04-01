@@ -6,14 +6,17 @@ use App\Models\Plan;
 use App\Models\Server;
 use App\Models\VpsServer;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 use App\Http\Resources\ServerResource;
+use Illuminate\Support\Facades\Request;
 use App\Http\Resources\VpsServerResource;
 
 class ResourceController extends Controller
 {
-    public function servers()
+    public function servers(Request $request)
     {
-        $servers = Server::with(['subServers.subSubServers'])->get();
+        /** @disregard @phpstan-ignore-line */
+        $servers = Server::where($request->platform, true)->with(['subServers.subSubServers'])->get();
 
         return response()->json([
             'status' => true,
@@ -39,5 +42,74 @@ class ResourceController extends Controller
             'status' => true,
             'servers' => VpsServerResource::collection($servers),
         ]);
+    }
+
+    public function nearestServer(Request $request)
+    {
+        /** @disregard @phpstan-ignore-line */
+        $platform = $request->platform;
+        $ip = $request->ip();
+        $locationData = Http::get("http://ip-api.com/json/{$ip}")->json();
+
+        if (!isset($locationData['lat']) || !isset($locationData['lon'])) {
+            return response()->json(['error' => 'Could not determine location'], 400);
+        }
+
+        $userLat = $locationData['lat'];
+        $userLon = $locationData['lon'];
+
+        // Fetch all servers and filter based on platform
+        $servers = Server::where($platform, true)->get(); // Get only servers supporting the platform
+
+        if ($servers->isEmpty()) {
+            return response()->json(['error' => 'No servers available for this platform'], 404);
+        }
+
+        // Separate free and premium servers
+        $freeServers = $servers->where('type', 'free');
+        $premiumServers = $servers->where('type', 'premium');
+
+        // Find the closest free server
+        $closestFreeServer = $freeServers->map(function ($server) use ($userLat, $userLon) {
+            $server->latitude = (float) $server->latitude;
+            $server->longitude = (float) $server->longitude;
+            $server->distance_km = $this->haversineDistance($userLat, $userLon, $server->latitude, $server->longitude);
+            return $server;
+        })->sortBy('distance_km')->first();
+
+        // Find the closest premium server
+        $closestPremiumServer = $premiumServers->map(function ($server) use ($userLat, $userLon) {
+            $server->latitude = (float) $server->latitude;
+            $server->longitude = (float) $server->longitude;
+            $server->distance_km = $this->haversineDistance($userLat, $userLon, $server->latitude, $server->longitude);
+            return $server;
+        })->sortBy('distance_km')->first();
+
+        return response()->json([
+            'status' => true,
+            'free' => $closestFreeServer,
+            'server' => $closestPremiumServer,
+        ]);
+    }
+
+    private function haversineDistance($lat1, $lon1, $lat2, $lon2)
+    {
+        $earthRadius = 6371; // Earth's radius in KM
+
+        $lat1 = deg2rad($lat1);
+        $lon1 = deg2rad($lon1);
+        $lat2 = deg2rad($lat2);
+        $lon2 = deg2rad($lon2);
+
+        $dLat = $lat2 - $lat1;
+        $dLon = $lon2 - $lon1;
+
+        $a = sin($dLat / 2) * sin($dLat / 2) +
+            cos($lat1) * cos($lat2) *
+            sin($dLon / 2) * sin($dLon / 2);
+
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+
+        return $earthRadius * $c; // Distance in KM
     }
 }

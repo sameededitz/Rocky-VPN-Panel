@@ -15,8 +15,10 @@ class VpsServerResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'ip_address' => $this->ip_address,
+            'domain' => $this->domain,
         ];
     }
 }
