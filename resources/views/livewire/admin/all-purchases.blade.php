@@ -86,7 +86,8 @@
                                     <tr>
                                         <td>{{ $purchase->id }}</td>
                                         <td>
-                                            <a href="{{ route('user.manage', $purchase->user->id) }}" class="text-primary">
+                                            <a href="{{ route('user.manage', $purchase->user->slug) }}"
+                                                class="text-primary">
                                                 {{ Str::title($purchase->user->name) ?? 'N/A' }}
                                             </a>
                                         </td>
@@ -103,13 +104,15 @@
                                         <td>
                                             <div class="d-flex align-items-center gap-1">
                                                 @if ($purchase->status != 'active')
-                                                    <button
-                                                        class="btn btn-light-success btn-rounded btn-icon d-inline-flex align-items-center"
-                                                        wire:click="$js.updateStatus({{ $purchase->id }}, 'active')"
-                                                        @disabled($purchase->status == 'active')>
-                                                        <iconify-icon icon="material-symbols:check-circle"
-                                                            width="20" height="20"></iconify-icon>
-                                                    </button>
+                                                    @if (($purchase->status == 'expired' || $purchase->status == 'cancelled') && \Carbon\Carbon::parse($purchase->end_date)->isFuture())
+                                                        <button
+                                                            class="btn btn-light-success btn-rounded btn-icon d-inline-flex align-items-center"
+                                                            wire:click="$js.updateStatus({{ $purchase->id }}, 'active')"
+                                                            @disabled($purchase->status == 'active')>
+                                                            <iconify-icon icon="material-symbols:check-circle"
+                                                                width="20" height="20"></iconify-icon>
+                                                        </button>
+                                                    @endif
                                                 @else
                                                     <button
                                                         class="btn btn-light-warning btn-rounded btn-icon d-inline-flex align-items-center"
@@ -138,7 +141,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="text-center">No purchases found</td>
+                                        <td colspan="8" class="text-center">No purchases found</td>
                                     </tr>
                                 @endforelse
                             </tbody>
