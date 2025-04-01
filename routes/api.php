@@ -30,7 +30,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/servers', [ResourceController::class, 'servers']);
 
-    Route::get('/nearby-servers', [ResourceController::class, 'nearestServer']);
+    Route::get('/nearest-server', [ResourceController::class, 'nearestServer']);
 });
 Route::get('/vps-servers', [ResourceController::class, 'vpsServers']);
 
