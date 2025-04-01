@@ -23,7 +23,7 @@
                 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
                     <div>
                         <p class="fw-medium fs-5 mb-1 text-info">Total Users</p>
-                        <h4 class="mb-0">20,000</h4>
+                        <h4 class="mb-0">{{ $totalUsers }}</h4>
                     </div>
                     <div
                         class="btn-light-info btn-rounded btn-icon d-inline-flex align-items-center p-2">
