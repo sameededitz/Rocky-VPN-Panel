@@ -5,16 +5,28 @@ namespace App\Http\Controllers\Api;
 use App\Models\Plan;
 use App\Models\Server;
 use App\Models\VpsServer;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use App\Http\Resources\ServerResource;
-use Illuminate\Http\Request;
 use App\Http\Resources\VpsServerResource;
+use Illuminate\Support\Facades\Validator;
 
 class ResourceController extends Controller
 {
     public function servers(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'platform' => 'required|string|in:android,ios,macos,windows',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()->all()
+            ], 400);
+        }
+
         $servers = Server::where($request->platform, true)->with(['subServers.subSubServers'])->get();
 
         return response()->json([
@@ -45,6 +57,16 @@ class ResourceController extends Controller
 
     public function nearestServer(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'platform' => 'required|string|in:android,ios,macos,windows',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors()->all()
+            ], 400);
+        }
+
         $platform = $request->platform;
         $ip = $request->ip();
         $locationData = Http::get("http://ip-api.com/json/{$ip}")->json();
