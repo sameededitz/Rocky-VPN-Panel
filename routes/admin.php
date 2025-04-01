@@ -20,7 +20,6 @@ use App\Livewire\Admin\PlanEdit;
 use App\Livewire\Admin\SubServerEdit;
 use App\Livewire\Admin\SubSubServerAdd;
 use App\Livewire\Admin\SubSubServerEdit;
-use App\Models\User;
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

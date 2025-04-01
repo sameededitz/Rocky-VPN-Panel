@@ -5,10 +5,14 @@
     <link href="{{ asset('src/plugins/src/apex/apexcharts.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('src/assets/css/light/dashboard/dash_1.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('src/assets/css/dark/dashboard/dash_1.css') }}" rel="stylesheet" type="text/css" />
+
+    <link href="{{ asset('src/assets/css/light/elements/infobox.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('src/assets/css/dark/elements/infobox.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('content')
-    <div class="row layout-top-spacing">
+    <livewire:admin.dashboard-stats />
+    {{-- <div class="row layout-top-spacing">
 
         <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
             <div class="widget widget-six">
@@ -714,7 +718,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection
 
 @section('scripts')
