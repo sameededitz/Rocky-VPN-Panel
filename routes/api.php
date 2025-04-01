@@ -29,6 +29,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/purchase/add', [PurchaseController::class, 'addPurchase'])->name('api.add.purchase');
 
     Route::get('/servers', [ResourceController::class, 'servers']);
+
+    Route::get('/nearby-servers', [ResourceController::class, 'nearestServer']);
 });
 Route::get('/vps-servers', [ResourceController::class, 'vpsServers']);
 
