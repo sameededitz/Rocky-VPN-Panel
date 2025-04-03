@@ -68,7 +68,7 @@ class VerifyController extends Controller
         if (!$user) {
             return response()->json([
                 'status' => false,
-                'message' => 'Email not found!'
+                'message' => 'User not found!'
             ], 400);
         }
 
