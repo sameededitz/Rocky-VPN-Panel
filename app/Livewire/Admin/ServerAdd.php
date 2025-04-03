@@ -58,6 +58,9 @@ class ServerAdd extends Component
 
     public function render()
     {
-        return view('livewire.admin.server-add');
+        /** @disregard @phpstan-ignore-line */
+        return view('livewire.admin.server-add')
+            ->extends('layouts.app')
+            ->section('content');
     }
 }

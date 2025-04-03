@@ -1,6 +1,7 @@
 <div>
     <div class="row layout-top-spacing" wire:init="fetchServerUsage" wire:poll.visible.10s="fetchServerUsage">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-end">
+            <button class="btn btn-outline-primary btn-lg me-3">Loading <svg> ... </svg></button>
             <button type="button" wire:click="fetchServerUsage"
                 class="btn btn-outline-info _effect--ripple waves-effect waves-light">
                 Recalculate Usage
