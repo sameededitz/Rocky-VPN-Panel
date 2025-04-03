@@ -79,6 +79,15 @@
                 </a>
             </li>
 
+            <li class="menu {{ request()->routeIs('feedbacks') ? 'active' : '' }}">
+                <a href="{{ route('feedbacks') }}" class="dropdown-toggle" aria-expanded="false">
+                    <div class="d-flex align-items-center gap-2">
+                        <Iconify-icon icon="fluent:person-feedback-32-regular" class="flex-shrink-0" width="20" height="20"></Iconify-icon>
+                        <span class="menu-text flex-grow-1">Feedbacks</span>
+                    </div>
+                </a>
+            </li>
+
             <li class="menu {{ request()->routeIs('users') ? 'active' : '' }}">
                 <a href="{{ route('users') }}" class="dropdown-toggle" aria-expanded="false">
                     <div class="d-flex align-items-center gap-2">

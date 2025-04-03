@@ -31,6 +31,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/servers', [ResourceController::class, 'servers']);
 
     Route::get('/nearest-server', [ResourceController::class, 'nearestServer']);
+
+    Route::post('/feedback/store', [ResourceController::class, 'addFeedback'])->name('api.feedback.add');
 });
 Route::get('/vps-servers', [ResourceController::class, 'vpsServers']);
 

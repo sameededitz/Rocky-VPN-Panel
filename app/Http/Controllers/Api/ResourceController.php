@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Plan;
 use App\Models\Server;
 use App\Models\VpsServer;
+use App\Models\UserFeedback;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
@@ -53,6 +54,38 @@ class ResourceController extends Controller
             'status' => true,
             'servers' => VpsServerResource::collection($servers),
         ]);
+    }
+
+    public function addFeedback(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'subject' => 'required|string|max:255',
+            'email' => 'required|email',
+            'rating' => 'required|numeric|min:0|max:5',
+            'message' => 'required|string|max:1000',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'error' => $validator->errors()->all()
+            ], 400);
+        }
+
+        // dd($request->all());
+
+        $feedback = UserFeedback::create([
+            'subject' => $request->subject,
+            'email' => $request->email,
+            'rating' => $request->rating,
+            'message' => $request->message,
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Feedback added successfully',
+            'feedback' => $feedback,
+        ], 201);
     }
 
     public function nearestServer(Request $request)

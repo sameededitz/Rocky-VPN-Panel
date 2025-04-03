@@ -12,6 +12,7 @@ use App\Livewire\Admin\AllSubServers;
 use App\Livewire\Admin\AllVpsServers;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Livewire\Admin\AllFeedback;
 use App\Livewire\Admin\AllPlans;
 use App\Livewire\Admin\AllPurchases;
 use App\Livewire\Admin\AllSubSubServers;
@@ -45,6 +46,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/plan/{plan}/update', PlanEdit::class)->name('plan.edit');
 
     Route::get('/purchases', AllPurchases::class)->name('purchases');
+
+    Route::get('/feedbacks', AllFeedback::class)->name('feedbacks');
 
     Route::get('/users', [DashboardController::class, 'users'])->name('users');
     Route::get('/users/{user:slug}/manage', ManageUser::class)->name('user.manage');
