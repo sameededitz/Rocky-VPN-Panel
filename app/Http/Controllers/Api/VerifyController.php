@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Jobs\SendPasswordReset;
 use App\Jobs\SendEmailVerification;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 
 class VerifyController extends Controller
@@ -45,6 +47,38 @@ class VerifyController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'A new verification link has been sent to the email address you provided during registration.'
+        ], 200);
+    }
+
+    public function sendResetLink(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()->all()
+            ], 400);
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Email not found!'
+            ], 400);
+        }
+
+        $token = Password::createToken($user);
+
+        SendPasswordReset::dispatch($user, $token)->delay(now()->addSeconds(30));
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Password reset link sent. Please check your Inbox.'
         ], 200);
     }
 }

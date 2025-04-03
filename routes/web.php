@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Auth\ResetPassword;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
@@ -15,9 +16,7 @@ Route::get('/', function () {
 require __DIR__ . '/auth.php';
 require __DIR__ . '/admin.php';
 
-Route::get('/test', function () {
-    return view('auth.verified-email');
-});
+Route::get('/test/{token}', ResetPassword::class);
 
 Route::get('/migrate-fresh', function () {
     Artisan::call('migrate:fresh');
