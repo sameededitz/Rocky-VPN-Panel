@@ -1,5 +1,5 @@
 <div>
-    <div class="row layout-top-spacing" wire:init="fetchServerUsage" wire:poll.10s="fetchServerUsage">
+    <div class="row layout-top-spacing" wire:init="fetchServerUsage" wire:poll.visible.10s="fetchServerUsage">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-end">
             <button type="button" wire:click="fetchServerUsage"
                 class="btn btn-outline-info _effect--ripple waves-effect waves-light">
