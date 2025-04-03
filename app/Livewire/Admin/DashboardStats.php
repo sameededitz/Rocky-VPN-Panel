@@ -32,7 +32,13 @@ class DashboardStats extends Component
         $this->totalPlans = Plan::count();
 
         $this->totalPurchases = Purchase::count();
-        $this->totalRevenue = Purchase::where('status', 'active')->sum('amount_paid');
+        $this->totalRevenue = Purchase::where('status', 'active')
+            ->orWhere(function ($query) {
+                $query->where('status', 'expired')
+                    ->whereNotNull('end_date')
+                    ->where('end_date', '<', now());
+            })
+            ->sum('amount_paid');
     }
 
     public function render()
