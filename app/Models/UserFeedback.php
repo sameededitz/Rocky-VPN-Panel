@@ -8,7 +8,6 @@ class UserFeedback extends Model
 {
     protected $fillable = [
         'email',
-        'rating',
         'subject',
         'message',
     ];

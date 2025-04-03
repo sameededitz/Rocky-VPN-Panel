@@ -27,7 +27,7 @@ class DashboardStats extends Component
 
         $this->totalUsers = User::count();
         $this->adminsCount = User::where('role', 'admin')->count();
-        $this->usersCount = User::where('role', 'admin')->count();
+        $this->usersCount = User::where('role', 'user')->count();
 
         $this->totalPlans = Plan::count();
 

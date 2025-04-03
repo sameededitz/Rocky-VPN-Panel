@@ -60,7 +60,6 @@ class AllFeedback extends Component
         $feedbacks = UserFeedback::query()
             ->when($this->search, fn($query) => $query->where('subject', 'like', '%' . $this->search . '%'))
             ->when($this->search, fn($query) => $query->where('email', 'like', '%' . $this->search . '%'))
-            ->when($this->search, fn($query) => $query->where('rating', 'like', '%' . $this->search . '%'))
             ->latest()
             ->paginate($this->perPage);
 

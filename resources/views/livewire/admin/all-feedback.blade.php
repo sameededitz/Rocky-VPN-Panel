@@ -64,7 +64,6 @@
                                     <th>#</th>
                                     <th>Subject</th>
                                     <th>Email</th>
-                                    <th>Rating</th>
                                     <th>Sent At</th>
                                     <th>Action</th>
                                 </tr>
@@ -75,7 +74,6 @@
                                         <td>{{ $feedback->id }}</td>
                                         <td>{{ $feedback->subject }}</td>
                                         <td>{{ $feedback->email }}</td>
-                                        <td>{{ $feedback->rating }}</td>
                                         <td>{{ $feedback->created_at->diffForHumans() }}</td>
                                         <td>
                                             <div class="d-flex align-items-center">

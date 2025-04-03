@@ -1,7 +1,7 @@
 <div>
-    <div class="row layout-top-spacing">
+    <div class="row layout-top-spacing" wire:init="fetchServerUsage" wire:poll.10s="fetchServerUsage">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-end">
-            <button type="button" x-on:click="$wire.$refresh()"
+            <button type="button" wire:click="fetchServerUsage"
                 class="btn btn-outline-info _effect--ripple waves-effect waves-light">
                 Recalculate Usage
             </button>
@@ -184,19 +184,29 @@
                     labels: [label]
                 };
 
-                new ApexCharts(document.querySelector(element), options).render();
+                var chart = new ApexCharts(document.querySelector(element), options);
+                chart.render();
+                return chart;
             }
-            let cpuUsage = extractNumber(`{{ $cpuUsage }}`);
-            let [ramUsed, ramTotal] = (`{{ $ramUsage }}`.match(/\d+/g) || [0, 1]).map(Number);
-            let ramPercent = (ramUsed / ramTotal) * 100;
-            let [diskUsed, diskTotal] = (`{{ $diskUsage }}`.match(/([\d.]+)/g) || [0, 1]).map(
-                Number);
-            let diskPercent = (diskUsed / diskTotal) * 100;
 
-            createGaugeChart("#cpu-chart", cpuUsage, "CPU Usage");
-            createGaugeChart("#ram-chart", ramPercent.toFixed(2), "RAM Usage");
-            createGaugeChart("#disk-chart", diskPercent.toFixed(2), "Disk Usage");
-        }, 2000);
+            var cpuChart = createGaugeChart("#cpu-chart", 0, "CPU Usage");
+            var ramChart = createGaugeChart("#ram-chart", 0, "RAM Usage");
+            var diskChart = createGaugeChart("#disk-chart", 0, "Disk Usage");
+
+
+            $wire.on('updateUsage', (event) => {
+                let cpuUsage = extractNumber(event.cpu);
+                let [ramUsed, ramTotal] = (event.ram.match(/\d+/g) || [0, 1]).map(Number);
+                let ramPercent = (ramUsed / ramTotal) * 100;
+                let [diskUsed, diskTotal] = (event.disk.match(/([\d.]+)/g) || [0, 1]).map(
+                    Number);
+                let diskPercent = (diskUsed / diskTotal) * 100;
+
+                cpuChart.updateSeries([cpuUsage]);
+                ramChart.updateSeries([ramPercent.toFixed(2)]);
+                diskChart.updateSeries([diskPercent.toFixed(2)]);
+            });
+        }, 100);
 
         $wire.on('sweetToast', (event) => {
             Swal.fire({

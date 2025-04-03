@@ -5,14 +5,10 @@ namespace App\Livewire\Admin;
 use Livewire\Component;
 use phpseclib3\Net\SSH2;
 use App\Models\VpsServer;
-use Livewire\Attributes\Lazy;
-use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use phpseclib3\Crypt\PublicKeyLoader;
 
-// #[Lazy]
-// #[Title('VPS Manager')]
 class VpsManager extends Component
 {
     public VpsServer $server;
@@ -61,6 +57,7 @@ HTML;
     public function mount(VpsServer $server)
     {
         $this->server = $server;
+        // $this->fetchServerUsage();
     }
 
     private function connectToServer()
@@ -197,6 +194,8 @@ HTML;
             $this->fetchConnectedUsers();
 
             $ssh->disconnect();
+
+            $this->dispatch('updateUsage', cpu: $this->cpuUsage, ram: $this->ramUsage, disk: $this->diskUsage);
         } catch (\Exception $e) {
             $this->cpuUsage = 'Error';
             $this->ramUsage = 'Error';
@@ -211,8 +210,6 @@ HTML;
 
     public function render()
     {
-        $this->fetchServerUsage();
-
         /** @disregard @phpstan-ignore-line */
         return view('livewire.admin.vps-manager')
             ->layout('layouts.app')
