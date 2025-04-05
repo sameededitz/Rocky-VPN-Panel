@@ -74,7 +74,7 @@ class VerifyController extends Controller
 
         $token = Password::createToken($user);
 
-        SendPasswordReset::dispatch($user, $token)->delay(now()->addSeconds(30));
+        SendPasswordReset::dispatch($user, $token)->delay(now()->addSeconds(5));
 
         return response()->json([
             'status' => true,

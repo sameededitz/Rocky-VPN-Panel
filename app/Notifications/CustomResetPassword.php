@@ -2,14 +2,14 @@
 
 namespace App\Notifications;
 
-use App\Mail\CustomResetPassword as MailCustomResetPassword;
+use App\Mail\CustomResetPassword;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Notifications\Notification;
 
-class CustomResetPassword extends Notification
+class CustomResetPasswordNotification extends Notification
 {
     use Queueable;
 
@@ -39,7 +39,7 @@ class CustomResetPassword extends Notification
     public function toMail($notifiable)
     {
         $resetUrl = $this->resetUrl($notifiable);
-        return (new MailCustomResetPassword($notifiable, $resetUrl, $this->token));
+        return (new CustomResetPassword($notifiable, $resetUrl, $this->token));
     }
 
     /**

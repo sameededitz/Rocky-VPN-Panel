@@ -1,26 +1,27 @@
 <?php
 
+use App\Livewire\Admin\PlanAdd;
 use App\Livewire\Admin\UserAdd;
+use App\Livewire\Admin\AllPlans;
+use App\Livewire\Admin\PlanEdit;
 use App\Livewire\Admin\UserEdit;
 use App\Livewire\Admin\ServerAdd;
 use App\Livewire\Admin\AllServers;
 use App\Livewire\Admin\ManageUser;
 use App\Livewire\Admin\ServerEdit;
+use App\Livewire\Admin\AllFeedback;
+use App\Livewire\Admin\AllPurchases;
 use App\Livewire\Admin\SubServerAdd;
 use App\Livewire\Admin\VpsServerAdd;
 use App\Livewire\Admin\AllSubServers;
 use App\Livewire\Admin\AllVpsServers;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Livewire\Admin\AllFeedback;
-use App\Livewire\Admin\AllPlans;
-use App\Livewire\Admin\AllPurchases;
-use App\Livewire\Admin\AllSubSubServers;
-use App\Livewire\Admin\PlanAdd;
-use App\Livewire\Admin\PlanEdit;
 use App\Livewire\Admin\SubServerEdit;
+use App\Livewire\Setting\MailSetting;
+use Illuminate\Support\Facades\Route;
 use App\Livewire\Admin\SubSubServerAdd;
+use App\Livewire\Admin\AllSubSubServers;
 use App\Livewire\Admin\SubSubServerEdit;
+use App\Http\Controllers\Admin\DashboardController;
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -58,4 +59,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/admins/{user}', ManageUser::class)->name('admin.manage');
     Route::get('/admin/create', UserAdd::class)->name('admin.add');
     Route::get('/admin/{user}/update', UserEdit::class)->name('admin.edit');
+
+    Route::get('/settings/mail', MailSetting::class)->name('settings.mail');
 });
