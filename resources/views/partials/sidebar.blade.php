@@ -105,6 +105,15 @@
                     </div>
                 </a>
             </li>
+
+            <li class="menu {{ request()->routeIs('settings.mail') ? 'active' : '' }}">
+                <a href="{{ route('settings.mail') }}" class="dropdown-toggle" aria-expanded="false">
+                    <div class="d-flex align-items-center gap-2">
+                        <Iconify-icon icon="fluent:mail-20-regular" class="flex-shrink-0" width="20" height="20"></Iconify-icon>
+                        <span class="menu-text flex-grow-1">SMTP</span>
+                    </div>
+                </a>
+            </li>
         </ul>
 
     </nav>
