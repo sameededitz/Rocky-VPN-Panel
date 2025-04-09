@@ -146,23 +146,10 @@ class ResourceController extends Controller
     {
         $servers = Server::where('status', 'active') // Only active servers
             ->with(['subServers' => function ($query) {
-                $query->where('status', 'active'); // Only active sub-servers
+                $query->where('status', 'active')->first(); // Only active sub-servers
             }])
-            ->paginate(10) // Paginate with 10 servers per page (you can adjust this)
-            ->map(function ($server) {
-                $firstSub = $server->subServers->first(); // Use the already eager-loaded sub-servers
-
-                return [
-                    'name' => $server->name,
-                    'status' => $server->status,
-                    'type' => $server->type,
-                    'image_url' => $server->image_url,
-                    'sub_server' => $firstSub ? [
-                        'name' => $firstSub->name,
-                        'status' => $firstSub->status,
-                    ] : null,
-                ];
-            });
+            ->paginate(4);
+        // dd($servers);
 
         return response()->json([
             'status' => true,
