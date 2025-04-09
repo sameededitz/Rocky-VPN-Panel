@@ -15,6 +15,8 @@ Route::middleware('guest')->group(function () {
     Route::post('/reset-password', [VerifyController::class, 'sendResetLink'])->middleware('throttle:2,1')->name('api.reset.password');
 
     Route::post('/email/resend-verification', [VerifyController::class, 'resendEmail'])->name('api.verify.resend');
+
+    Route::get('/web/servers', [ResourceController::class, 'webServers'])->name('api.web.servers');
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {

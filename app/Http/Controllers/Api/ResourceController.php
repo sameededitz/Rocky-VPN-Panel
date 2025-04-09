@@ -61,7 +61,6 @@ class ResourceController extends Controller
         $validator = Validator::make($request->all(), [
             'subject' => 'required|string|max:255',
             'email' => 'required|email',
-            'rating' => 'required|numeric|min:0|max:5',
             'message' => 'required|string|max:1000',
         ]);
 
@@ -72,12 +71,10 @@ class ResourceController extends Controller
             ], 400);
         }
 
-        // dd($request->all());
 
         $feedback = UserFeedback::create([
             'subject' => $request->subject,
             'email' => $request->email,
-            'rating' => $request->rating,
             'message' => $request->message,
         ]);
 
@@ -143,6 +140,34 @@ class ResourceController extends Controller
             'free' => $closestFreeServer,
             'server' => $closestPremiumServer,
         ]);
+    }
+
+    public function webServers()
+    {
+        $servers = Server::where('status', 'active') // Only active servers
+            ->with(['subServers' => function ($query) {
+                $query->where('status', 'active'); // Only active sub-servers
+            }])
+            ->paginate(10) // Paginate with 10 servers per page (you can adjust this)
+            ->map(function ($server) {
+                $firstSub = $server->subServers->first(); // Use the already eager-loaded sub-servers
+
+                return [
+                    'name' => $server->name,
+                    'status' => $server->status,
+                    'type' => $server->type,
+                    'image_url' => $server->image_url,
+                    'sub_server' => $firstSub ? [
+                        'name' => $firstSub->name,
+                        'status' => $firstSub->status,
+                    ] : null,
+                ];
+            });
+
+        return response()->json([
+            'status' => true,
+            'servers' => $servers,
+        ], 200);
     }
 
     private function haversineDistance($lat1, $lon1, $lat2, $lon2)
