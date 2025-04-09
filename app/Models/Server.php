@@ -40,6 +40,11 @@ class Server extends Model implements HasMedia
         return $this->hasMany(SubServer::class);
     }
 
+    public function activeSubServer()
+    {
+        return $this->hasOne(SubServer::class)->where('status', 'active');
+    }
+
     public function isPremium()
     {
         return $this->type === 'premium';

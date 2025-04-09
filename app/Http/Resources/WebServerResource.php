@@ -14,18 +14,17 @@ class WebServerResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        // Get the first active sub-server
-        $firstSub = $this->subServers->firstWhere('status', 'active');
-
         return [
             'name' => $this->name,
             'status' => $this->status,
             'type' => $this->type,
             'image_url' => $this->image_url,
-            'sub_server' => $firstSub ? [
-                'name' => $firstSub->name,
-                'status' => $firstSub->status,
-            ] : null,
+            'sub_server' => $this->whenLoaded('activeSubServer', function () {
+                return [
+                    'name' => $this->activeSubServer->name,
+                    'status' => $this->activeSubServer->status,
+                ];
+            }),
         ];
     }
 }

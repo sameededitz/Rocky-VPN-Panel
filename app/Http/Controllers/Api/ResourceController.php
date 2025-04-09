@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use App\Http\Resources\ServerResource;
 use App\Http\Resources\VpsServerResource;
+use App\Http\Resources\WebServerResource;
 use Illuminate\Support\Facades\Validator;
 
 class ResourceController extends Controller
@@ -145,16 +146,10 @@ class ResourceController extends Controller
     public function webServers()
     {
         $servers = Server::where('status', 'active') // Only active servers
-            ->with(['subServers' => function ($query) {
-                $query->where('status', 'active')->first(); // Only active sub-servers
-            }])
-            ->paginate(4);
-        // dd($servers);
+            ->with('activeSubServer') // Eager load the active sub-server
+            ->paginate(10);
 
-        return response()->json([
-            'status' => true,
-            'servers' => $servers,
-        ], 200);
+        return WebServerResource::collection($servers);
     }
 
     private function haversineDistance($lat1, $lon1, $lat2, $lon2)
