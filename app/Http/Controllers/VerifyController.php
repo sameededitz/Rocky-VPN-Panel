@@ -61,15 +61,4 @@ class VerifyController extends Controller
         }
         abort(403);
     }
-
-    // public function viewInBrowser($email, $token)
-    // {
-    //     $user = User::where('email', $email)->first();
-
-    //     return view('email.custom-password-reset', [
-    //         'user' => $user,
-    //         'resetUrl' => route('password.reset', ['token' => $token, 'email' => $email]),
-    //         'viewInBrowserUrl' => null,
-    //     ]);
-    // }
 }

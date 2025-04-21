@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Jobs\SendPasswordReset;
 use App\Jobs\SendEmailVerification;
 use App\Http\Controllers\Controller;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 
@@ -42,7 +43,8 @@ class VerifyController extends Controller
             ], 200);
         }
 
-        SendEmailVerification::dispatch($user)->delay(now()->addSeconds(5));
+        // SendEmailVerification::dispatch($user)->delay(now()->addSeconds(5));
+        $user->sendEmailVerificationNotification();
 
         return response()->json([
             'status' => true,
@@ -79,6 +81,40 @@ class VerifyController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Password reset link sent. Please check your Inbox.'
+        ], 200);
+    }
+
+    public function verifyEmail(Request $request, $id, $hash)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'User not found!'
+            ], 404);
+        }
+
+        // Validate signature
+        if (! $request->hasValidSignature()) {
+            return response()->json(['message' => 'Invalid or expired verification link.'], 403);
+        }
+
+        // Validate hash
+        if (! hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+            return response()->json(['message' => 'Invalid verification link.'], 403);
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            return response()->json(['message' => 'Email already verified.'], 200);
+        }
+
+        $user->markEmailAsVerified();
+        event(new Verified($user));
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Email verified successfully!'
         ], 200);
     }
 }

@@ -16,6 +16,8 @@ Route::middleware('guest')->group(function () {
 
     Route::post('/email/resend-verification', [VerifyController::class, 'resendEmail'])->name('api.verify.resend');
 
+    Route::get('/email/verify/{id}/{hash}', [VerifyController::class, 'verifyEmail'])->name('verification.verify');
+
     Route::get('/web/servers', [ResourceController::class, 'webServers'])->name('api.web.servers');
 });
 
