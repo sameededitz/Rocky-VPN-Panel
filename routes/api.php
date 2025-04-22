@@ -26,6 +26,12 @@ Route::middleware('guest')->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', [UserController::class, 'user'])->name('api.user');
 
+    Route::post('/user/update', [UserController::class, 'updateProfile'])->name('api.profile.update');
+
+    Route::post('/user/update-password', [UserController::class, 'updatePassword'])->name('api.profile.update.password');
+
+    Route::delete('/user/delete', [UserController::class, 'deleteAccount'])->name('api.profile.delete');
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('api.logout');
 
     Route::get('/purchase/active', [PurchaseController::class, 'active'])->name('api.plan.active');

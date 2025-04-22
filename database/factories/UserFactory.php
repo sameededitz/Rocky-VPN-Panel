@@ -26,7 +26,7 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => null,
+            'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
@@ -65,7 +65,7 @@ class UserFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'name' => 'user',
-                'email' => 'sameedhassan22@gmail.com',
+                'email' => 'user@gmail.com',
                 'password' => Hash::make('user12345'),
                 'role' => 'user',
             ];
