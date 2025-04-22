@@ -3,10 +3,7 @@
 namespace App\Notifications;
 
 use App\Mail\CustomResetPassword;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Notifications\Notification;
 
 class CustomResetPasswordNotification extends Notification
@@ -18,9 +15,9 @@ class CustomResetPasswordNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct($token)
     {
-        //
+        $this->token = $token;
     }
 
     /**
@@ -47,13 +44,6 @@ class CustomResetPasswordNotification extends Notification
      */
     protected function resetUrl($notifiable)
     {
-        return URL::temporarySignedRoute(
-            'password.reset',
-            Carbon::now()->addMinutes(Config::get('auth.passwords.users.expire')),
-            [
-                'token' => $this->token,
-                'email' => $notifiable->getEmailForPasswordReset(),
-            ]
-        );
+        return config('app.frontend_url') . '/reset-password?token=' . $this->token . '&email=' . urlencode(encrypt($notifiable->getEmailForPasswordReset()));
     }
 }

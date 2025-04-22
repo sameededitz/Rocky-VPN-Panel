@@ -12,7 +12,9 @@ Route::middleware('guest')->group(function () {
 
     Route::post('/signup', [AuthController::class, 'signup'])->name('api.signup');
 
-    Route::post('/reset-password', [VerifyController::class, 'sendResetLink'])->middleware('throttle:2,1')->name('api.reset.password');
+    Route::post('/forgot-password', [VerifyController::class, 'sendResetLink'])->middleware('throttle:10,1')->name('api.reset.password');
+
+    Route::post('/reset-password', [VerifyController::class, 'resetPassword'])->middleware('throttle:10,1')->name('password.reset');
 
     Route::post('/email/resend-verification', [VerifyController::class, 'resendEmail'])->name('api.verify.resend');
 
