@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\VerifyController;
 use App\Http\Controllers\Api\PurchaseController;
 use App\Http\Controllers\Api\ResourceController;
+use App\Http\Controllers\Api\BillingAddressController;
 
 Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('api.login');
@@ -45,6 +46,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/nearest-server', [ResourceController::class, 'nearestServer']);
 
     Route::post('/feedback/store', [ResourceController::class, 'addFeedback'])->name('api.feedback.add');
+
+    Route::get('/billing-address', [BillingAddressController::class, 'show'])->name('api.billing.address.show');
+
+    Route::post('/billing-address/store', [BillingAddressController::class, 'store'])->name('api.billing.address.store');
+
+    Route::delete('/billing-address/delete', [BillingAddressController::class, 'destroy'])->name('api.billing.address.delete');
 });
 Route::get('/vps-servers', [ResourceController::class, 'vpsServers']);
 

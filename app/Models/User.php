@@ -40,7 +40,7 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public function getSlugOptions() : SlugOptions
+    public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('name')
@@ -66,5 +66,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function activePlan()
     {
         return $this->hasOne(Purchase::class)->where('status', 'active')->where('end_date', '>', now())->latest();
+    }
+
+    public function billingAddress()
+    {
+        return $this->hasOne(BillingAddress::class);
     }
 }

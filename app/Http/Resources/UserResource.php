@@ -19,8 +19,10 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'email_verified_at' => $this->email_verified_at,
+            'last_login' => $this->last_login,
             'role' => $this->role,
             'created_at' => $this->created_at->toIso8601String(),
+            'billing_address' => $this->whenLoaded('billingAddress', new BillingAddressResource($this->billingAddress)),
         ];
     }
 }
