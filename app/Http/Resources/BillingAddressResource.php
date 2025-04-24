@@ -15,11 +15,12 @@ class BillingAddressResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'         => $this->id,
-            'name'  => $this->full_name,
-            'address'    => $this->address,
-            'city'       => $this->city,
-            'country'    => $this->country,
+            'id' => $this->id,
+            'name' => $this->full_name,
+            'address' => $this->address,
+            'city' => $this->city,
+            'state' => $this->country,
+            'postal_code' => $this->postal_code,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
