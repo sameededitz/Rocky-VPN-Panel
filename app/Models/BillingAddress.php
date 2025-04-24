@@ -11,7 +11,8 @@ class BillingAddress extends Model
         'full_name',
         'address',
         'city',
-        'country',
+        'state',
+        'postal_code',
     ];
 
     public function user()

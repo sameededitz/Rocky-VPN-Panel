@@ -19,7 +19,8 @@ class BillingAddressController extends Controller
             'name' => 'required|string|max:255|min:3',
             'address' => 'required|string',
             'city' => 'required|string',
-            'country' => 'required|string',
+            'state' => 'required|string',
+            'postal_code' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -37,7 +38,8 @@ class BillingAddressController extends Controller
                 'full_name' => $request->name,
                 'address' => $request->address,
                 'city' => $request->city,
-                'country' => $request->country,
+                'state' => $request->state,
+                'postal_code' => $request->postal_code,
             ]
         );
 

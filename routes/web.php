@@ -29,6 +29,11 @@ Route::get('/migrate', function () {
     return "Migrated";
 });
 
+Route::get('/rollback-migration', function () {
+    Artisan::call('migrate:rollback --step=1');
+    return "Rolled back migration";
+});
+
 Route::get('/seed', function () {
     Artisan::call('db:seed');
     return "Seeded";
