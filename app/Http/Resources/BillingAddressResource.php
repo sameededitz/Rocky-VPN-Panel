@@ -19,7 +19,7 @@ class BillingAddressResource extends JsonResource
             'name' => $this->full_name,
             'address' => $this->address,
             'city' => $this->city,
-            'state' => $this->country,
+            'state' => $this->state,
             'postal_code' => $this->postal_code,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
