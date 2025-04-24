@@ -16,7 +16,7 @@ class BillingAddressResource extends JsonResource
     {
         return [
             'id'         => $this->id,
-            'full_name'  => $this->full_name,
+            'name'  => $this->full_name,
             'address'    => $this->address,
             'city'       => $this->city,
             'country'    => $this->country,
