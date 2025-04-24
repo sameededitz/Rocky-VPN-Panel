@@ -16,7 +16,7 @@ class BillingAddressController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'full_name' => 'required|string|max:255|min:3',
+            'name' => 'required|string|max:255|min:3',
             'address' => 'required|string',
             'city' => 'required|string',
             'country' => 'required|string',
@@ -34,7 +34,7 @@ class BillingAddressController extends Controller
         $user->billingAddress()->updateOrCreate(
             ['user_id' => $user->id],
             [
-                'full_name' => $request->full_name,
+                'full_name' => $request->name,
                 'address' => $request->address,
                 'city' => $request->city,
                 'country' => $request->country,
