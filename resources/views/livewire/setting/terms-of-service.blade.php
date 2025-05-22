@@ -29,7 +29,7 @@
     </div>
 
     <div class="row layout-top-spacing">
-        <div class="col-xl-6 col-lg-8 col-md-12 col-sm-12 mb-3">
+        <div class="col-xl-12 col-12">
             <div class="card">
                 <div class="card-body">
                     <h4 class="mb-2">Terms of Service</h4>
