@@ -114,6 +114,15 @@
                     </div>
                 </a>
             </li>
+
+            <li class="menu {{ request()->routeIs('settings.tos') ? 'active' : '' }}">
+                <a href="{{ route('settings.tos') }}" class="dropdown-toggle" aria-expanded="false">
+                    <div class="d-flex align-items-center gap-2">
+                        <Iconify-icon icon="carbon:policy" class="flex-shrink-0" width="20" height="20"></Iconify-icon>
+                        <span class="menu-text flex-grow-1">Terms of Service</span>
+                    </div>
+                </a>
+            </li>
         </ul>
 
     </nav>

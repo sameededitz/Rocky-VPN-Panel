@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Admin\SubSubServerAdd;
 use App\Livewire\Admin\AllSubSubServers;
 use App\Livewire\Admin\SubSubServerEdit;
+use App\Livewire\Setting\TermsOfService;
 use App\Http\Controllers\Admin\DashboardController;
 
 Route::group(['middleware' => ['auth']], function () {
@@ -61,4 +62,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/admin/{user}/update', UserEdit::class)->name('admin.edit');
 
     Route::get('/settings/mail', MailSetting::class)->name('settings.mail');
+    Route::get('/settings/tos', TermsOfService::class)->name('settings.tos');
 });
