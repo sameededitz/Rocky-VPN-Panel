@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Plan;
+use App\Models\Option;
 use App\Models\Server;
 use App\Models\VpsServer;
 use App\Models\UserFeedback;
@@ -44,6 +45,19 @@ class ResourceController extends Controller
         return response()->json([
             'status' => true,
             'plans' => $plans,
+        ]);
+    }
+
+    public function options()
+    {
+        $options = [
+            'tos' => Option::where('key', 'tos')->first()->value ?? '',
+            'privacy_policy' => Option::where('key', 'privacy_policy')->first()->value ?? '',
+        ];
+
+        return response()->json([
+            'tos' => $options['tos'],
+            'privacy_policy' => $options['privacy_policy'],
         ]);
     }
 

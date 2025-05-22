@@ -58,3 +58,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::get('/vps-servers', [ResourceController::class, 'vpsServers']);
 
 Route::get('/plans', [ResourceController::class, 'plans']);
+
+Route::get('/options', [ResourceController::class, 'options']);
